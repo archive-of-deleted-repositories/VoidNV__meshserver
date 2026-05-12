@@ -10,7 +10,12 @@ import {
   Square,
   X,
 } from "lucide-react";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import {
+  closeWindow,
+  isFullscreen,
+  minimizeWindow,
+  toggleMaximizeWindow,
+} from "../lib/browserWindow";
 import { Logo } from "./Logo";
 import { useApp, activeWorkspace } from "../state/store";
 
@@ -31,23 +36,21 @@ export function TitleBar() {
 
   async function minimize() {
     try {
-      await getCurrentWindow().minimize();
+      await minimizeWindow();
     } catch {
       /* noop */
     }
   }
   async function toggleMax() {
     try {
-      const w = getCurrentWindow();
-      await w.toggleMaximize();
-      setIsMax(await w.isMaximized());
+      setIsMax(await toggleMaximizeWindow());
     } catch {
       /* noop */
     }
   }
   async function close() {
     try {
-      await getCurrentWindow().close();
+      await closeWindow();
     } catch {
       /* noop */
     }
@@ -56,7 +59,7 @@ export function TitleBar() {
   React.useEffect(() => {
     (async () => {
       try {
-        setIsMax(await getCurrentWindow().isMaximized());
+        setIsMax(isFullscreen());
       } catch {
         /* noop */
       }

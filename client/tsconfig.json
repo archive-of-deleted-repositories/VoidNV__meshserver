@@ -14,12 +14,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@tauri-apps/api/window": ["./src/lib/shims/window.ts"],
-      "@tauri-apps/plugin-dialog": ["./src/lib/shims/dialog.ts"],
-      "@tauri-apps/plugin-opener": ["./src/lib/shims/opener.ts"]
-    }
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }

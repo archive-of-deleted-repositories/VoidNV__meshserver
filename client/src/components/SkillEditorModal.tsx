@@ -1,13 +1,12 @@
 import React from "react";
 import { FolderSearch, Pencil, Save, Trash2, X } from "lucide-react";
 import { useApp, type SkillBadge } from "../state/store";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
+import { promptServerPath } from "../lib/browserDialog";
 import {
-  isTauri,
   skillsDefaultDir,
   skillsDeleteFile,
   skillsSaveFile,
-} from "../lib/tauri";
+} from "../lib/serverApi";
 
 const badges: SkillBadge[] = [
   "GENERAL",
@@ -58,9 +57,8 @@ export function SkillEditorModal() {
   const activeDir = skillLibraryDir || defaultDir;
 
   async function pickStorageFolder() {
-    if (!isTauri()) return;
     try {
-      const picked = await openDialog({ directory: true, multiple: false });
+      const picked = await promptServerPath({ directory: true, multiple: false }, activeDir);
       if (typeof picked === "string") setSkillLibraryDir(picked);
     } catch {
       /* noop */
@@ -197,7 +195,7 @@ export function SkillEditorModal() {
                 <div className="input skill-storage-path">
                   {existing?.origin || activeDir || "Default Mesh skills folder"}
                 </div>
-                <button className="btn" onClick={pickStorageFolder} disabled={!isTauri()}>
+                <button className="btn" onClick={pickStorageFolder}>
                   <FolderSearch size={12} /> Save elsewhere
                 </button>
               </div>

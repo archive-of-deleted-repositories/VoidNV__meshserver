@@ -9,9 +9,9 @@ import {
   ShieldAlert,
   X,
 } from "lucide-react";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { openExternalUrl } from "../../lib/browserExternal";
 import { useApp, activeWorkspace, type BrowserTab } from "../../state/store";
-import { browserNormalize, isTauri } from "../../lib/tauri";
+import { browserNormalize } from "../../lib/serverApi";
 
 // History state per-tab, kept outside React so it survives tab switches.
 const tabHistory = new Map<
@@ -101,8 +101,7 @@ export function BrowserPanel() {
 
   async function openExternal(url: string) {
     if (!url) return;
-    if (isTauri()) await openUrl(url).catch(() => {});
-    else window.open(url, "_blank", "noopener");
+    openExternalUrl(url);
   }
 
   const recent = [
@@ -112,7 +111,7 @@ export function BrowserPanel() {
       title: "developers.cloudflare.com",
       url: "https://developers.cloudflare.com",
     },
-    { letter: "T", title: "tauri.app", url: "https://tauri.app" },
+    { letter: "N", title: "nodejs.org", url: "https://nodejs.org" },
     { letter: "1", title: "127.0.0.1", url: "http://127.0.0.1" },
     { letter: "L", title: "localhost", url: "http://localhost:3000" },
   ];

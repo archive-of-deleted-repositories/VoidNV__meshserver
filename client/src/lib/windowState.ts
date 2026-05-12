@@ -1,4 +1,4 @@
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { isFullscreen, setFullscreen } from "./browserWindow";
 
 function setFullscreenDataset(fullscreen: boolean) {
   if (typeof document === "undefined") return;
@@ -7,7 +7,7 @@ function setFullscreenDataset(fullscreen: boolean) {
 
 export async function syncFullscreenState(): Promise<boolean> {
   try {
-    const fullscreen = await getCurrentWindow().isFullscreen();
+    const fullscreen = isFullscreen();
     setFullscreenDataset(fullscreen);
     return fullscreen;
   } catch {
@@ -18,9 +18,8 @@ export async function syncFullscreenState(): Promise<boolean> {
 
 export async function toggleAppFullscreen(): Promise<boolean> {
   try {
-    const w = getCurrentWindow();
-    const next = !(await w.isFullscreen());
-    await w.setFullscreen(next);
+    const next = !isFullscreen();
+    await setFullscreen(next);
     setFullscreenDataset(next);
     return next;
   } catch {

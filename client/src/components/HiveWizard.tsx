@@ -17,8 +17,8 @@ import {
   X,
   Type,
 } from "lucide-react";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
-import { fsHome, isTauri } from "../lib/tauri";
+import { promptServerPath } from "../lib/browserDialog";
+import { fsHome } from "../lib/serverApi";
 import { useApp, type CliAgent } from "../state/store";
 import { useDetection } from "../state/detection";
 
@@ -58,13 +58,8 @@ export function HiveWizard() {
   }, []);
 
   async function pickFolder() {
-    if (!isTauri()) {
-      const v = window.prompt("Working folder", wiz.folder);
-      if (v) setWiz({ folder: v });
-      return;
-    }
     try {
-      const picked = await openDialog({ directory: true, multiple: false });
+      const picked = await promptServerPath({ directory: true, multiple: false }, wiz.folder);
       if (typeof picked === "string") setWiz({ folder: picked });
     } catch {
       /* noop */
@@ -72,9 +67,8 @@ export function HiveWizard() {
   }
 
   async function pickContextFiles() {
-    if (!isTauri()) return;
     try {
-      const picked = await openDialog({ multiple: true });
+      const picked = await promptServerPath({ multiple: true });
       if (Array.isArray(picked)) setWiz({ contextFiles: [...wiz.contextFiles, ...picked] });
       else if (typeof picked === "string")
         setWiz({ contextFiles: [...wiz.contextFiles, picked] });
@@ -609,7 +603,6 @@ function ContextStep({ onPick }: { onPick: () => void }) {
     e.preventDefault();
     const files: string[] = [];
     for (const f of Array.from(e.dataTransfer.files)) {
-      // @ts-ignore - Tauri passes a path on file objects on Windows
       const p = (f as any).path as string | undefined;
       if (p) files.push(p);
       else files.push(f.name);

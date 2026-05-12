@@ -19,8 +19,8 @@ import {
   skillsListRoots,
   type DiscoveredSkill,
   type SkillRoot,
-} from "../../lib/tauri";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
+} from "../../lib/serverApi";
+import { promptServerPath } from "../../lib/browserDialog";
 import { toast } from "../../state/toasts";
 import { useDrag } from "../../state/drag";
 
@@ -366,7 +366,7 @@ function ImportDialog({ onClose }: { onClose: () => void }) {
 
   async function addFolder() {
     try {
-      const picked = await openDialog({ directory: true, multiple: false });
+      const picked = await promptServerPath({ directory: true, multiple: false });
       if (typeof picked === "string") {
         const extras = [...extraDirs, picked];
         setExtraDirs(extras);

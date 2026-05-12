@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { detectTools, type DetectionReport, type DetectedTool } from "../lib/tauri";
+import { detectTools, type DetectionReport, type DetectedTool } from "../lib/serverApi";
 
 type DetectionState = {
   report: DetectionReport | null;

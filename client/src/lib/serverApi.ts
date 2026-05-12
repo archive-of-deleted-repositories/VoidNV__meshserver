@@ -102,10 +102,6 @@ function sendWhenOpen(ws: WebSocket, payload: unknown) {
   ws.addEventListener("open", () => ws.send(data), { once: true });
 }
 
-export function isTauri(): boolean {
-  return true;
-}
-
 export async function ptySpawn(args: {
   id: string;
   shell?: string;

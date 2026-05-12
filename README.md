@@ -16,10 +16,9 @@
 
 ## What It Is
 
-Mesh Server is the server-only edition of Mesh. It keeps the desktop app's TSX
-layout and matte terminal UI, but replaces Tauri with a backend that owns the
-real work: PTYs, files, skills, CLI detection, auth, workspace metadata, and VPS
-stats.
+Mesh Server is a web app for running Mesh-style terminal workspaces on a VPS.
+The backend owns the real work: PTYs, files, skills, CLI detection, auth,
+workspace metadata, and VPS stats.
 
 ```text
 Browser UI
@@ -37,7 +36,7 @@ Fastify backend on 127.0.0.1:8787
 | Area | What Mesh Server Does |
 | --- | --- |
 | **Terminals** | Real server-side PTYs through `node-pty`; browser reconnect does not kill shells |
-| **Design** | One-to-one reuse of the desktop TSX/CSS interface, with web shims replacing Tauri |
+| **Design** | Mesh-style TSX/CSS interface with direct browser/server helpers |
 | **Workspaces** | SQLite metadata plus terminal scrollback logs under `~/.mesh-server` |
 | **Files** | Server filesystem browser with `MESH_ALLOWED_ROOTS` traversal protection |
 | **Skills** | Import/save/delete Markdown skills, stored in SQLite and optional files |
@@ -162,7 +161,7 @@ Mesh Server/
 │   ├── db.ts             # SQLite schema
 │   ├── ptyManager.ts     # node-pty lifecycle and websocket fanout
 │   └── services/         # files, skills, detect, stats
-├── client/src/           # copied Mesh desktop TSX/CSS + web shims
+├── client/src/           # React web client
 ├── shared/               # shared types and zod schemas
 └── scripts/              # install, systemd, tunnel notes
 ```

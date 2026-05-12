@@ -19,8 +19,8 @@ import {
 } from "../state/theme";
 import { useDetection } from "../state/detection";
 import { RefreshCw } from "lucide-react";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
-import { isTauri, skillsDefaultDir } from "../lib/tauri";
+import { promptServerPath } from "../lib/browserDialog";
+import { skillsDefaultDir } from "../lib/serverApi";
 
 type Tab = "appearance" | "terminal" | "behavior" | "shortcuts" | "about";
 
@@ -350,9 +350,8 @@ function BehaviorTab() {
   }, []);
 
   async function pickSkillFolder() {
-    if (!isTauri()) return;
     try {
-      const picked = await openDialog({ directory: true, multiple: false });
+      const picked = await promptServerPath({ directory: true, multiple: false }, skillLibraryDir || defaultDir);
       if (typeof picked === "string") setSkillLibraryDir(picked);
     } catch {
       /* noop */
@@ -399,7 +398,7 @@ function BehaviorTab() {
             </div>
             <div className="settings-path">{skillLibraryDir || defaultDir || "Default Mesh skills folder"}</div>
           </div>
-          <button className="btn sm" onClick={pickSkillFolder} disabled={!isTauri()}>
+          <button className="btn sm" onClick={pickSkillFolder}>
             <FolderSearch size={12} /> Choose folder
           </button>
         </div>
@@ -450,14 +449,14 @@ function AboutTab() {
         <div className="settings-row">
           <div>
             <div className="settings-row-label">Version</div>
-            <div className="settings-row-sub">Mesh 0.1.0 · Tauri + React</div>
+            <div className="settings-row-sub">Mesh Server 0.1.0 · React + Fastify</div>
           </div>
         </div>
         <div className="settings-row">
           <div>
             <div className="settings-row-label">Runtime</div>
             <div className="settings-row-sub">
-              Native PTY backend via portable-pty. Terminals are real processes.
+              Server PTY backend via node-pty. Terminals are real processes.
             </div>
           </div>
         </div>

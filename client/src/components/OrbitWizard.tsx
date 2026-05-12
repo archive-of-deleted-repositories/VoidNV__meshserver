@@ -8,8 +8,8 @@ import {
   Search,
   Save,
 } from "lucide-react";
-import { open as openDialog } from "@tauri-apps/plugin-dialog";
-import { fsHome, isTauri } from "../lib/tauri";
+import { promptServerPath } from "../lib/browserDialog";
+import { fsHome } from "../lib/serverApi";
 import { useApp, type CliAgent } from "../state/store";
 import { useDetection } from "../state/detection";
 
@@ -59,13 +59,8 @@ export function OrbitWizard() {
   const agentTotal = Object.values(wiz.agents).reduce((a, b) => a + b, 0) as number;
 
   async function pickFolder() {
-    if (!isTauri()) {
-      const v = window.prompt("Working folder", wiz.folder);
-      if (v) setWiz({ folder: v });
-      return;
-    }
     try {
-      const picked = await openDialog({ directory: true, multiple: false });
+      const picked = await promptServerPath({ directory: true, multiple: false }, wiz.folder);
       if (typeof picked === "string") setWiz({ folder: picked });
     } catch {
       /* noop */

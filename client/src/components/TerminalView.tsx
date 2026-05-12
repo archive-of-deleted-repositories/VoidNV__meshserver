@@ -3,13 +3,12 @@ import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import {
-  isTauri,
   onPtyExit,
   onPtyOutput,
   ptyResize,
   ptySpawn,
   ptyWrite,
-} from "../lib/tauri";
+} from "../lib/serverApi";
 import type { Terminal as TerminalDef } from "../state/store";
 import { currentThemeVars, useTheme } from "../state/theme";
 
@@ -165,7 +164,6 @@ function TerminalViewComponent({
   }, [queueWrite]);
 
   const schedulePtyResize = React.useCallback((size: { cols: number; rows: number }) => {
-    if (!isTauri()) return;
     pendingPtySizeRef.current = size;
     if (pendingPtyResizeTimerRef.current !== null) return;
     pendingPtyResizeTimerRef.current = window.setTimeout(() => {
@@ -296,11 +294,7 @@ function TerminalViewComponent({
     fitAfterLayoutSettles();
 
     const onData = xterm.onData((data) => {
-      if (isTauri()) {
-        ptyWrite(idRef.current, data).catch(() => {});
-      } else {
-        xterm.write(data);
-      }
+      ptyWrite(idRef.current, data).catch(() => {});
     });
 
     const ro = new ResizeObserver(() => {
@@ -323,7 +317,7 @@ function TerminalViewComponent({
         else bufferHiddenOutput(msg);
       });
 
-      if (isTauri() && !spawnedRef.current) {
+      if (!spawnedRef.current) {
         spawnedRef.current = true;
         const size = (await fitBeforeSpawn()) ?? { cols: xterm.cols, rows: xterm.rows };
         await ptySpawn({
@@ -336,11 +330,6 @@ function TerminalViewComponent({
         }).catch((err) => {
           xterm.writeln("\x1b[31mFailed to spawn shell: " + String(err) + "\x1b[0m");
         });
-      } else if (!isTauri()) {
-        xterm.writeln(
-          "\x1b[90mMesh terminal (preview). Launch via `npm run tauri dev` for a real shell.\x1b[0m",
-        );
-        xterm.write("$ ");
       }
     })();
 
@@ -371,13 +360,9 @@ function TerminalViewComponent({
     onActivate(idRef.current);
     const xterm = xtermRef.current;
     xterm?.focus();
-    if (isTauri()) {
-      ptyWrite(idRef.current, data).catch(() => {
-        xterm?.write(data);
-      });
-    } else {
-      xterm?.paste(data);
-    }
+    ptyWrite(idRef.current, data).catch(() => {
+      xterm?.write(data);
+    });
   }
 
   return (

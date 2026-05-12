@@ -10,7 +10,7 @@ import {
   FolderPlus,
   RefreshCw,
 } from "lucide-react";
-import { fsHome, fsList, fsRead, type FsEntry } from "../../lib/tauri";
+import { fsHome, fsList, fsRead, type FsEntry } from "../../lib/serverApi";
 import { useApp, activeWorkspace } from "../../state/store";
 
 type TreeState = Record<string, { open: boolean; entries?: FsEntry[] }>;

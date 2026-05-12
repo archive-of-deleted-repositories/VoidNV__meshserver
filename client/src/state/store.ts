@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { uid } from "../lib/ids";
 import { deleteServerWorkspace, loadServerWorkspaces, saveServerWorkspace } from "../lib/serverState";
-import { ptyKill } from "../lib/tauri";
+import { ptyKill } from "../lib/serverApi";
 import { useTheme } from "./theme";
 import { useDetection } from "./detection";
 
