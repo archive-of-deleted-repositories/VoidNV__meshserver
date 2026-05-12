@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@tauri-apps/api/window": ["./src/lib/shims/window.ts"],
+      "@tauri-apps/plugin-dialog": ["./src/lib/shims/dialog.ts"],
+      "@tauri-apps/plugin-opener": ["./src/lib/shims/opener.ts"]
+    }
+  },
+  "include": ["src"]
+}

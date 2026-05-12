@@ -1,0 +1,43 @@
+{
+  "name": "mesh-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "tsx watch server/src/index.ts",
+    "dev:client": "vite --config client/vite.config.ts --host 127.0.0.1",
+    "build": "tsc -p tsconfig.server.json && vite build --config client/vite.config.ts",
+    "rebuild:pty": "npm rebuild node-pty --build-from-source --foreground-scripts",
+    "doctor:pty": "node scripts/check-pty.mjs",
+    "start": "node dist/server/src/index.js"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/static": "^8.3.0",
+    "@fastify/websocket": "^11.2.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.5.0",
+    "concurrently": "^9.2.1",
+    "fastify": "^5.6.2",
+    "lucide-react": "^0.469.0",
+    "node-pty": "^1.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsx": "^4.20.6",
+    "vite": "^7.0.4",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "~5.8.3"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

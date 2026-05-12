@@ -1,0 +1,23 @@
+[Unit]
+Description=Mesh Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/mesh-server
+Environment=NODE_ENV=production
+Environment=MESH_HOST=127.0.0.1
+Environment=MESH_PORT=8787
+Environment=MESH_ALLOWED_ROOTS=/home/mesh/projects
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+User=mesh
+Group=mesh
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target
